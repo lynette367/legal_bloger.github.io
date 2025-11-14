@@ -1,0 +1,664 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" >
+
+<title>文科生的自建博客神器：Gridea之旅 | 文科生的春天</title>
+<meta name="description" content="一棵小小芽，努力破土出">
+
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+<link rel="shortcut icon" href="https://lynette367.github.io/favicon.ico?v=1763108418148">
+
+<!-- Google Fonts - Bubblegum Sans -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bubblegum+Sans&display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Font Awesome -->
+<link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+<!-- AOS 动画库 -->
+<link href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+<!-- KaTeX for math -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
+<link rel="stylesheet" href="https://lynette367.github.io/styles/main.css">
+
+<script>
+    tailwind.config = {
+        theme: {
+            extend: {
+                colors: {
+                    primary: '#FF9EBB',
+                    secondary: '#8BD8BD',
+                    tertiary: '#FFD166',
+                    light: '#FFF5F8',
+                    dark: '#333333',
+                    gray: {
+                        light: '#FFE5EC',
+                        medium: '#FFD1DC',
+                        dark: '#6C757D'
+                    }
+                },
+                fontFamily: {
+                    sans: ['Comic Sans MS', 'Bubblegum Sans', 'cursive'],
+                    title: ['Bubblegum Sans', 'Comic Sans MS', 'cursive']
+                },
+                boxShadow: {
+                    'card': '0 4px 12px rgba(255, 158, 187, 0.15), 0 2px 4px rgba(255, 158, 187, 0.1)',
+                    'card-hover': '0 10px 20px rgba(255, 158, 187, 0.25), 0 4px 8px rgba(255, 158, 187, 0.15)'
+                },
+                borderRadius: {
+                    'xl': '1rem',
+                    '2xl': '1.5rem',
+                    '3xl': '2rem'
+                }
+            }
+        }
+    }
+</script>
+<style type="text/tailwindcss">
+    @layer utilities {
+        .text-shadow {
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        .text-shadow-lg {
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.12), 0 2px 4px rgba(0, 0, 0, 0.08);
+        }
+        .transition-all-300 {
+            transition: all 300ms ease-in-out;
+        }
+        .bg-gradient-primary {
+            background: linear-gradient(135deg, #FF9EBB 0%, #FFB3D1 100%);
+        }
+        .bg-gradient-secondary {
+            background: linear-gradient(135deg, #8BD8BD 0%, #A8E6D1 100%);
+        }
+        .bg-gradient-tertiary {
+            background: linear-gradient(135deg, #FFD166 0%, #FFDC7A 100%);
+        }
+    }
+</style>
+<style>
+    body {
+        font-family: 'Comic Sans MS', 'Bubblegum Sans', cursive;
+        font-size: 16px;
+        line-height: 1.6;
+        color: #333333;
+        background: linear-gradient(135deg, #FFF5F8 0%, #FFE5EC 50%, #FFF0F6 100%);
+        min-height: 100vh;
+    }
+    
+    h1, h2, h3, h4, h5, h6 {
+        font-family: 'Bubblegum Sans', 'Comic Sans MS', cursive;
+        font-weight: 600;
+        color: #FF9EBB;
+    }
+    
+    .article-card {
+        transition: transform 0.3s ease, box-shadow 0.3s ease, rotate 0.3s ease;
+    }
+    
+    .article-card:hover {
+        transform: translateY(-8px) rotate(1deg);
+        box-shadow: 0 15px 25px rgba(255, 158, 187, 0.3), 0 5px 10px rgba(255, 158, 187, 0.2);
+    }
+    
+    .tag {
+        transition: all 0.3s ease;
+        border-radius: 20px;
+        border: 2px solid transparent;
+    }
+    
+    .tag:hover {
+        background-color: #FF9EBB;
+        color: white;
+        transform: scale(1.1);
+        border-color: #FF9EBB;
+    }
+    
+    .nav-link {
+        position: relative;
+        transition: all 0.3s ease;
+    }
+    
+    .nav-link::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 0;
+        height: 3px;
+        background-color: #FF9EBB;
+        border-radius: 2px;
+        transition: width 0.3s ease;
+    }
+    
+    .nav-link:hover::after {
+        width: 100%;
+    }
+    
+    .nav-link:hover {
+        color: #FF9EBB;
+        transform: scale(1.05);
+    }
+    
+    button {
+        border-radius: 25px;
+        transition: all 0.3s ease;
+    }
+    
+    button:hover {
+        transform: rotate(2deg) scale(1.05);
+    }
+    
+    .carousel {
+        position: relative;
+        overflow: hidden;
+        display: block !important;
+        min-height: 500px;
+        width: 100%;
+    }
+    
+    @media (min-width: 768px) {
+        .carousel {
+            min-height: 600px;
+        }
+    }
+    
+    .carousel-inner {
+        display: flex;
+        transition: transform 0.5s ease;
+        height: 100%;
+        width: 100%;
+    }
+    
+    .carousel-item {
+        min-width: 100%;
+        width: 100%;
+        flex-shrink: 0;
+        position: relative;
+    }
+    
+    .carousel-item img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        display: block;
+    }
+    
+    .carousel-caption {
+        z-index: 5;
+    }
+    
+    .carousel-indicators {
+        position: absolute;
+        bottom: 20px;
+        left: 50%;
+        transform: translateX(-50%);
+        display: flex;
+        gap: 8px;
+        z-index: 10;
+    }
+    
+    .carousel-indicator {
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: rgba(255, 255, 255, 0.5);
+        cursor: pointer;
+        transition: all 0.3s ease;
+        border: none;
+        padding: 0;
+    }
+    
+    .carousel-indicator:hover {
+        background-color: rgba(255, 255, 255, 0.8);
+    }
+    
+    .carousel-indicator.active {
+        background-color: white;
+        width: 24px;
+        border-radius: 5px;
+    }
+    
+    .carousel-control-prev,
+    .carousel-control-next {
+        border: none;
+        outline: none;
+    }
+    
+    .carousel-control-prev:focus,
+    .carousel-control-next:focus {
+        outline: 2px solid rgba(255, 255, 255, 0.5);
+        outline-offset: 2px;
+    }
+    
+    /* 自定义滚动条 - 粉色系 */
+    ::-webkit-scrollbar {
+        width: 12px;
+    }
+    
+    ::-webkit-scrollbar-track {
+        background: #FFE5EC;
+        border-radius: 10px;
+    }
+    
+    ::-webkit-scrollbar-thumb {
+        background: linear-gradient(135deg, #FF9EBB 0%, #FFB3D1 100%);
+        border-radius: 10px;
+        border: 2px solid #FFE5EC;
+    }
+    
+    ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(135deg, #FF8CB0 0%, #FFA8CC 100%);
+    }
+    
+    /* Firefox 滚动条 */
+    * {
+        scrollbar-width: thin;
+        scrollbar-color: #FF9EBB #FFE5EC;
+    }
+</style>
+
+
+<script src="//cdn.jsdelivr.net/gh/highlightjs/cdn-release@11.5.1/build/highlight.min.js"></script>
+
+
+<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+
+
+  </head>
+  <body class="bg-light">
+    <header class="sticky top-0 z-50 bg-white/90 backdrop-blur-sm shadow-md border-b-4 border-primary">
+  <div class="container mx-auto px-4">
+    <div class="flex items-center justify-between py-4">
+      <div class="flex items-center">
+        <a href="https://lynette367.github.io" class="flex items-center">
+          <img src="https://lynette367.github.io/images/avatar.png" 
+               alt="文科生的春天" 
+               class="h-10 w-10 md:h-12 md:w-12 rounded-full object-cover mr-3 border-4 border-primary">
+          <div class="flex flex-col">
+            <span class="text-xl md:text-2xl font-bold text-primary">文科生的春天</span>
+            
+              <span class="text-xs md:text-sm text-gray-500 hidden md:inline-block">一棵小小芽，努力破土出</span>
+            
+          </div>
+        </a>
+      </div>
+      
+      <!-- 桌面导航 -->
+      <nav class="hidden md:flex items-center space-x-8">
+        
+          
+            <a href="/" class="nav-link text-gray-600 hover:text-primary">
+              首页
+            </a>
+          
+        
+          
+            <a href="/archives" class="nav-link text-gray-600 hover:text-primary">
+              全部文章
+            </a>
+          
+        
+          
+            <a href="/tags" class="nav-link text-gray-600 hover:text-primary">
+              主题
+            </a>
+          
+        
+          
+            <a href="/post/about" class="nav-link text-gray-600 hover:text-primary">
+              关于
+            </a>
+          
+        
+      </nav>
+      
+      <!-- 移动端菜单按钮 -->
+      <div class="md:hidden">
+        <button id="menu-toggle" class="text-gray-600 hover:text-primary focus:outline-none">
+          <i class="fa fa-bars text-xl"></i>
+        </button>
+      </div>
+    </div>
+    
+    <!-- 移动端导航菜单 -->
+    <div id="mobile-menu" class="md:hidden hidden pb-4">
+      <nav class="flex flex-col space-y-4">
+        
+          
+            <a href="/" class="text-gray-600 hover:text-primary">
+              首页
+            </a>
+          
+        
+          
+            <a href="/archives" class="text-gray-600 hover:text-primary">
+              全部文章
+            </a>
+          
+        
+          
+            <a href="/tags" class="text-gray-600 hover:text-primary">
+              主题
+            </a>
+          
+        
+          
+            <a href="/post/about" class="text-gray-600 hover:text-primary">
+              关于
+            </a>
+          
+        
+      </nav>
+    </div>
+  </div>
+</header>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    const menuToggle = document.getElementById('menu-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    
+    if (menuToggle && mobileMenu) {
+      menuToggle.addEventListener('click', function() {
+        mobileMenu.classList.toggle('hidden');
+        
+        // 切换图标
+        const icon = menuToggle.querySelector('i');
+        if (mobileMenu.classList.contains('hidden')) {
+          icon.classList.remove('fa-times');
+          icon.classList.add('fa-bars');
+        } else {
+          icon.classList.remove('fa-bars');
+          icon.classList.add('fa-times');
+        }
+      });
+    }
+  });
+</script>
+
+    
+    <main>
+      <div class="container mx-auto px-4 py-12">
+        <div class="max-w-4xl mx-auto">
+          <article class="bg-white/90 backdrop-blur-sm rounded-3xl shadow-card overflow-hidden border-4 border-primary" data-aos="fade-up">
+            
+              <div class="h-64 md:h-96 overflow-hidden rounded-t-3xl">
+                <img src="https://lynette367.github.io/post-images/wen-ke-sheng-de-zi-jian-bo-ke-shen-qi-gridea-zhi-lu.png" alt="文科生的自建博客神器：Gridea之旅" class="w-full h-full object-cover">
+              </div>
+            
+            <div class="p-6 md:p-8">
+              <h1 class="text-3xl md:text-4xl font-bold mb-4 text-primary flex items-center gap-2">
+                <span>📖</span>
+                文科生的自建博客神器：Gridea之旅
+              </h1>
+              <div class="flex items-center mb-6 flex-wrap">
+                <span class="text-gray-500 text-sm mr-4">2025-11-13</span>
+                
+                  
+                    
+                    <a href="https://lynette367.github.io/tag/h8vct_CbqA/" class="tag text-xs font-medium px-3 py-1 rounded-full bg-primary/10 text-primary mr-2 mb-2">
+                      文科生也学点编程
+                    </a>
+                  
+                
+              </div>
+              <div class="post-content prose prose-lg max-w-none" v-pre>
+                <h2 id="今天看到一个公众号推荐gridea这个github项目据说是个博客神器-我大致看了一下觉得有两点非常吸引我-第一可以自己设置域名-毕竟一个域名还是要10刀左右不便宜呢能省则省第二可以自动生成sitemap被谷歌收录这一点尤其让我心动-因为很多时候为了能够增加谷歌的搜索和流量甚至需要花高价买一个域名-如果能够凭借sitemap被谷歌收录那就太好了-所以我决定来尝试一下看看是不是真的能够让谷歌收录-全程在gemini-ai的支持下完成感谢google出品">今天看到一个公众号推荐Gridea这个github项目，据说是个博客神器。<br>
+我大致看了一下，觉得有两点非常吸引我。<br>
+第一，可以自己设置域名 —— 毕竟一个域名还是要10刀左右，不便宜呢，能省则省；<br>
+第二，可以自动生成sitemap，被谷歌收录，这一点尤其让我心动。<br>
+因为很多时候，为了能够增加谷歌的搜索和流量，甚至需要花高价买一个域名。如果能够凭借sitemap被谷歌收录，那就太好了。<br>
+所以我决定来尝试一下，看看是不是真的能够让谷歌收录。<br>
+全程在gemini ai的支持下完成，感谢google出品。</h2>
+<h2 id="首先先介绍一个gridea这个项目-github-仓库地址-httpsgithubcomgetgrideagridea-作用-一个面向博客写作爱好者的桌面应用程序它利用-github-pages-等免费托管服务提供了一个一站式-图形化界面的解决方案让用户能够专注于写作而不用过多操心博客的底层技术搭建和部署问题-我把gridea的宣传页也博客里面的没有删除有兴趣可以先了解一下">首先，先介绍一个Gridea这个项目：<br>
+🌟 GitHub 仓库地址： https://github.com/getgridea/gridea<br>
+🌟 作用： 一个面向博客写作爱好者的桌面应用程序，它利用 GitHub Pages 等免费托管服务，提供了一个一站式、图形化界面的解决方案，让用户能够专注于写作，而不用过多操心博客的底层技术搭建和部署问题。<br>
+我把Gridea的宣传页也博客里面的，没有删除，有兴趣可以先了解一下。</h2>
+<p>🛠️ Gridea 使用步骤详解<br>
+先下载 Gridea 客户端。<br>
+访问链接，见上。<br>
+<img src="https://lynette367.github.io/post-images/1763050674293.png" alt="" loading="lazy"></p>
+<p>点“立即开始”<br>
+根据电脑操作系统（Windows、macOS 或 Linux）下载对应的安装包。<br>
+运行下载的文件，完成安装。</p>
+<p>这里多说一句，mac下载之后，是无法直接打开的，这时系统会告诉你，需要修改以下操作：<br>
+“设置”-&gt; 隐私与安全性 -&gt; 安全性 -&gt; “仍要打开”<br>
+然后就可以了。</p>
+<p>然后注册一个 GitHub 账号（如果还没有）。</p>
+<p>在 GitHub 上创建一个用于博客的仓库（repo），仓库名称必须是：您的用户名.github.io</p>
+<p>❓现在打开了gridea，创建了github repo，应该怎么把它链接到我的github repo</p>
+<p>Gridea站点设置 (Site Settings)：<br>
+<img src="https://lynette367.github.io/post-images/1763051361762.png" alt="" loading="lazy"></p>
+<p>🌞配置解疑：<br>
+如果选择 Proxy：确保您的代理软件正在运行。<br>
+在 Gridea 的代理设置中，正确输入代理的 IP 地址 和 端口号。</p>
+<p>💡最佳实践：<br>
+建议您先尝试选择 Direct，然后进行一次 “检测远程连接” 或 “同步”。<br>
+如果连接成功，就保持 Direct。<br>
+如果连接失败并报错（例如连接超时），那么很可能您需要选择 Proxy 并进行配置。<br>
+Gridea 客户端中的所有设置，包括 HTTP 代理的设置（选择 Direct 还是 Proxy），都是可以随时修改的。</p>
+<p>🚉如何生成 Personal Access Token (PAT)<br>
+点击 GitHub 页面右上角的头像，选择 Settings（设置）。<br>
+在左侧导航栏底部，找到 Developer settings（开发者设置）。<br>
+选择 Personal access tokens（个人访问令牌）。<br>
+点击 Generate new token (classic)。</p>
+<p>填写信息：<br>
+Note（备注）： 填写 Gridea_Token 等方便识别的名称。<br>
+Expiration（有效期）： 建议选择较长时间，例如 90 天或一年，或者选 No expiration（无期限）。<br>
+Select scopes（选择权限）： 务必勾选 repo（所有仓库权限），这是 Gridea 推送文件所必需的。<br>
+点击底部的 Generate token（生成令牌）。</p>
+<p>🔑 复制生成的 Token！ 这个 Token 只会显示一次，请立即复制并保存好。</p>
+<p>现在回到 Gridea 客户端，找到左侧导航栏的 远程（Remote）。<br>
+粘贴您刚刚在 GitHub 上复制的Token, 就是那个很长的一串字符！<br>
+点击右下角的 保存（Save）。<br>
+点击左下角的 检测远程连接（Check Remote Connection）。<br>
+如果提示 “远程连接成功”，恭喜您，配置完成！<br>
+之后如果修改域名，直接点“保存”就可以了，不需要再次进行“检测远程链接”。</p>
+<p>❓如何正式使用Gridea博客：<br>
+先在客户端中撰写一篇新的文章，并保存。<br>
+点击 Gridea 客户端右上角的 同步（Sync） 按钮。<br>
+Gridea 会自动生成网页文件，并推送到您的 GitHub 仓库。<br>
+几分钟后（等待 GitHub Pages 构建完成），您就可以通过 “域名” 字段中填写的地址访问您的博客了！</p>
+<p>❓我在域名中填写的是https://我的用户名.github.io/，我看到github repo已经生成了相应的文件，但是我打开这个域名，网站上现在还是显示404，怎么解决</p>
+<p>🔍 导致 404 的常见原因及解决方案</p>
+<ol>
+<li>
+<p>GitHub Pages 设置问题（最常见原因）<br>
+登录 GitHub，进入github 仓库。<br>
+点击仓库顶部的 Settings (设置) 选项卡。<br>
+在左侧导航栏中找到 Pages。<br>
+在 Build and deployment 部分：<br>
+Source: 确保选择了 Deploy from a branch。<br>
+Branch: 检查下拉菜单是否选择了 Gridea 推送代码的正确分支（通常是 main 或 master）。<br>
+Folder: 确保选择了 / (root)。<br>
+确认并保存：如果设置不对，修改后保存。</p>
+</li>
+<li>
+<p>部署构建延迟<br>
+GitHub Pages 在您推送新代码后，需要时间来构建 (Build) 和部署 (Deploy) 您的网站。</p>
+</li>
+</ol>
+<p>检查：<br>
+回到您的 GitHub 仓库主页。<br>
+点击 Actions (操作) 选项卡。<br>
+查看最近一次的 pages build and deployment 流程是否显示为 绿色对勾（Success）。<br>
+操作： 如果流程仍在进行中（橙色或黄色），请耐心等待几分钟。如果失败（红色叉号），点击查看日志以了解失败原因。</p>
+<ol start="3">
+<li>域名填写错误或浏览器缓存<br>
+检查 Gridea 域名： 确认在 Gridea 中填写的域名是 https://您的用户名.github.io/ 还是 https://GitHubRepo名字.github.io/legal_blog？</li>
+</ol>
+<p>如果仓库名是 myblog 且它不是 &lt;用户名&gt;.github.io 的格式，那么您的正确访问地址应该是：https://&lt;您的用户名&gt;.github.io/legal_blog/。</p>
+<p>清除浏览器缓存： 有时浏览器会缓存 404 页面。尝试在浏览器中按 Ctrl + F5 (Windows/Linux) 或 Cmd + Shift + R (Mac) 强制刷新，或者用隐身模式/无痕模式访问。</p>
+<p>🚨 我的问题出在第一步和第三步。<br>
+第一步很好解决，第二步也等到GitHub变成绿色了。但是第三步反而出了问题。</p>
+<p>✅ 核心问题分析：域名与仓库命名不匹配<br>
+仓库名称可以自定义，但如果在 Gridea 中填写的域名是 https://lynette.github.io。<br>
+那么，GitHub Repo仓库名称必须严格等于 lynette.github.io。</p>
+<p>另外，GitHub 用户名是不是lynette？如果是lynette367，那么在 Gridea 中填写的域名是https://lynette367.github.io</p>
+<p>按照上述步骤修改完之后，再次同步： 在 Gridea 客户端中点击“同步”按钮。</p>
+<p>访问： 再次访问 https://lynette367.github.io。</p>
+
+              </div>
+            </div>
+          </article>
+          
+          
+            <div class="bg-white/90 backdrop-blur-sm rounded-3xl shadow-card overflow-hidden mt-8 p-6 border-4 border-primary/30 hover:border-primary transition-all hover:scale-105" data-aos="fade-up">
+              <div class="text-sm text-gray-500 mb-2 flex items-center gap-2">
+                <span>➡️</span>
+                下一篇
+              </div>
+              <a href="https://lynette367.github.io/post/hello-gridea/" class="text-xl font-bold hover:text-primary transition-colors flex items-center gap-2">
+                <span>📝</span>
+                Hello Gridea
+              </a>
+            </div>
+          
+          
+          
+        </div>
+      </div>
+    </main>
+
+    <footer class="bg-[#E6F7F0] text-gray-800 py-12 mt-16 border-t-4 border-primary">
+  <div class="container mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <!-- 关于我们 -->
+      <div>
+        <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+          <span>🐰</span>
+          关于我们
+        </h3>
+        <p class="text-gray-700 mb-4">一棵小小芽，努力破土出</p>
+        <div class="flex space-x-4">
+          
+          
+          
+        </div>
+      </div>
+      
+      <!-- 快速链接 -->
+      <div>
+        <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+          <span>🐾</span>
+          快速链接
+        </h3>
+        <ul class="space-y-2">
+          
+            <li>
+              
+                <a href="/" class="text-gray-600 hover:text-primary transition-all hover:scale-105">
+                  首页
+                </a>
+              
+            </li>
+          
+            <li>
+              
+                <a href="/archives" class="text-gray-600 hover:text-primary transition-all hover:scale-105">
+                  全部文章
+                </a>
+              
+            </li>
+          
+            <li>
+              
+                <a href="/tags" class="text-gray-600 hover:text-primary transition-all hover:scale-105">
+                  主题
+                </a>
+              
+            </li>
+          
+            <li>
+              
+                <a href="/post/about" class="text-gray-600 hover:text-primary transition-all hover:scale-105">
+                  关于
+                </a>
+              
+            </li>
+          
+        </ul>
+      </div>
+      
+      <!-- 热门主题 -->
+      <div>
+        <h3 class="text-xl font-bold mb-4 flex items-center gap-2">
+          <span>🏷️</span>
+          热门主题
+        </h3>
+        <ul class="space-y-2">
+          
+            <li>
+              <a href="https://lynette367.github.io/tag/NCbV36f1Il/" class="text-gray-600 hover:text-primary transition-all hover:scale-105">
+                心理
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://lynette367.github.io/tag/8z0ImzkMnI_/" class="text-gray-600 hover:text-primary transition-all hover:scale-105">
+                网络赚钱
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://lynette367.github.io/tag/XvM6VJJMsQ/" class="text-gray-600 hover:text-primary transition-all hover:scale-105">
+                文科生面临的社会心理问题
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://lynette367.github.io/tag/you-xie-li-shi-bu-tai-dong/" class="text-gray-600 hover:text-primary transition-all hover:scale-105">
+                有些历史不太懂
+              </a>
+            </li>
+          
+            <li>
+              <a href="https://lynette367.github.io/tag/h8vct_CbqA/" class="text-gray-600 hover:text-primary transition-all hover:scale-105">
+                文科生也学点编程
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+    </div>
+    
+    <div class="border-t-2 border-primary/30 mt-8 pt-8 text-center text-gray-700">
+      <p>
+        Powered by <a href="https://github.com/getgridea/gridea" target="_blank">Gridea</a> | &copy; 2025 文科生的春天. 保留所有权利.
+      </p>
+    </div>
+  </div>
+</footer>
+
+
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+
+<script type="application/javascript">
+
+AOS.init();
+
+hljs.initHighlightingOnLoad()
+
+</script>
+
+
+
+
+    
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        if (typeof AOS !== 'undefined') {
+          AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true
+          });
+        }
+      });
+    </script>
+  </body>
+</html>
